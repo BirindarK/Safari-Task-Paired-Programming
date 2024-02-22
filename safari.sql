@@ -58,18 +58,17 @@ INSERT INTO assignments (staff_id, enclosure_id, day) VALUES (2, 3, 'Monday');
 -- MVP Queries
 
 --The names of the animals in a given enclosure
-SELECT name FROM animals WHERE enclosure_id = 2;
+SELECT animals.name, animals.enclosure_id FROM animals INNER JOIN enclosures ON animals.enclosure_id = enclosures.id WHERE enclosure_id = 2;
+
 
 --The names of the staff working in a given enclosure
-SELECT staff_id FROM assignments WHERE enclosure_id = 3;
-SELECT name FROM staff WHERE id = 2;
+
+SELECT staff.name, assignments.enclosure_id FROM staff INNER JOIN assignments ON assignments.staff_id =staff.id WHERE assignments.enclosure_id = 3;
 
 --Extension Queries
 
 --The names of staff working in enclosures which are closed for maintenance
-SELECT id FROM enclosures WHERE closedForMaintenance = true;
-SELECT staff_id FROM assignments WHERE enclosure_id = 2 OR enclosure_id = 3;
-SELECT name FROM staff WHERE id = 2 OR id = 3;
+SELECT DISTINCT staff.name, assignments.enclosure_id FROM staff INNER JOIN assignments ON assignments.staff_id = staff.id INNER JOIN enclosures ON enclosures.id = assignments.enclosure_id WHERE enclosures.closedForMaintenance = true;
 
 --The name of the enclosure where the oldest animal lives. If there are two animals who are the same age choose the first one alphabetically.
  SELECT animals.name, animals.age, enclosures.name FROM enclosures INNER JOIN animals ON enclosures.id = animals.enclosure_id ORDER BY animals.age DESC, animals.name ASC;
@@ -82,4 +81,5 @@ SELECT enclosures.name, COUNT (DISTINCT staff.name) FROM enclosures INNER JOIN a
 
 --The names of the other animals sharing an enclosure with a given animal (eg. find the names of all the animals sharing the big cat field with Tony)
 SELECT animals.id, animals.name, enclosures.name FROM enclosures INNER JOIN animals ON enclosures.id = animals.enclosure_id;
-SELECT * FROM animals WHERE enclosure_id = 2 AND animals.id != 2;
+SELECT * FROM animals WHERE enclosure_id = 2 AND animals.id != 2
+
